@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <itc:parameter name="fontSize">4</itc:parameter>
+   <h1>APL ${self/REPORT.Param2} - HANA Filesystem Growth Report - Available space and Used %</h1>
+   
+   <h2> Monitoring Threshold Information</h2>
+   <itc:query>
+        <itc:parameter name="className">ThresholdDefault</itc:parameter>
+        <itc:select name="DEFAULT.ObjectClass">UnixFileSystem</itc:select> 
+        <itc:select name="OBJECT_Name">Linux: File System Used % (APL)</itc:select>
+   </itc:query>
+   
+   <itc:section>
+      <itc:parameter name="className">HANADb</itc:parameter>
+      <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+      <itc:select name="OBJECT_Category">APL</itc:select>
+      <itc:select name="OBJECT_MaintenanceMode">false</itc:select>
+      <pbr />
+      <h2>${context/OBJECT_Name}</h2>
+      <itc:section>
+         <itc:parameter name="className">HANAHost</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+         <h3>host : ${context/HANAHost.HOST}</h3>
+         <itc:section>
+            <itc:parameter name="className">UnixFileSystem</itc:parameter>
+            <itc:select name="UnixFileSystem.MointPoint" oper="MATCH">(^/sapmnt/log$)|(^/sapmnt/data$)|(^/hana/log$)|(^/hana/data$)</itc:select>
+            <itc:select name="ComputerService.Host">${context/HANAHost.HOST}</itc:select>
+            <itc:parameter name="sortAttr">ComputerService.Host</itc:parameter>
+            <itc:parameter name="sortOrder">ASC</itc:parameter>
+            <h4>File System ${context/UnixFileSystem.Name}</h4>
+            <h5>${context/APPLICATION_SERVICE.ApplicationId-&gt;SSH2.Host}  ${context/UnixFileSystem.MointPoint}</h5>
+           
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">6631887472313696</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">6631887472313696</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+
+         </itc:section>
+      </itc:section>
+   </itc:section>
+</itc:report>

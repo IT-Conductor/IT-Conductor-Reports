@@ -1,0 +1,23 @@
+<itc:report
+	xmlns:itc="urn:itconductor">
+	<itc:section>
+		<itc:parameter name="className">SAPApp</itc:parameter>
+		<itc:select name="OBJECT_CustomerId">${self/OBJECT_CustomerId}</itc:select>
+		<itc:select name="APPLICATION_Role">PROD</itc:select>
+		<h1>${context/OBJECT_Name} - Availability Report</h1>
+		<h2 style="white-space: nowrap;">/Production/SAP Systems/${context/OBJECT_Name}/Availability</h2>
+		<itc:threshold>
+			<itc:parameter name="className">AvailabilityThreshold</itc:parameter>
+			<itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+			<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+			<itc:parameter name="title">false</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="annotations">false</itc:parameter>
+			<itc:parameter name="width">100%</itc:parameter>
+			<itc:parameter name="excludeCategory.Alarm">true</itc:parameter>
+			<itc:parameter name="excludeCategory.Warning">true</itc:parameter>
+			<itc:parameter name="excludeCategory.Severity">true</itc:parameter>
+		</itc:threshold>
+	</itc:section>
+</itc:report>

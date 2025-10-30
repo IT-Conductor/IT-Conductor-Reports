@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    param1 : role
+    param2 : display text for role
+    param3 : annotate
+-->
+<itc:report xmlns:itc="urn:itconductor">
+   <itc:parameter name="fontSize">4</itc:parameter>
+   <h1>APL ${self/REPORT.Param2} SAP Systems Capacity Report</h1>
+
+   <h2> Monitoring Threshold Information</h2>
+   <itc:query>
+        <itc:parameter name="className">ThresholdDefault</itc:parameter>
+        <itc:select name="DEFAULT.ObjectClass">UnixFileSystem</itc:select> 
+        <itc:select name="OBJECT_Name">Linux: File System Used % (APL)</itc:select>
+   </itc:query>
+
+   <itc:section>
+      <itc:parameter name="className">SAP</itc:parameter>
+      <itc:select name="OBJECT_Category">APL</itc:select>
+      <itc:select name="OBJECT_MaintenanceMode">false</itc:select>
+      <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+      <pbr />
+      <h2>${context/OBJECT_Name}</h2>
+      <itc:section>
+         <itc:parameter name="className">SAPAppServerService</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+         <h3>App Server ${context/OBJECT_Name}: Linux File systems on ${context/SAPService.AppServerHost}</h3>
+         <itc:section>
+            <itc:parameter name="className">UnixFileSystem</itc:parameter>
+            <itc:select name="ComputerService.Host">${context/SAPService.AppServerHost}</itc:select>
+            <h4>File System ${context/OBJECT_Name}: Used %</h4>
+            <itc:threshold>
+               <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.UsedPercent</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="valuesOnly">true</itc:parameter>
+               <itc:parameter name="annotations">false</itc:parameter>
+               <itc:parameter name="width">100%</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+            </itc:threshold>
+            <itc:threshold>
+               <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.UsedPercent</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="valuesOnly">true</itc:parameter>
+               <itc:parameter name="annotations">false</itc:parameter>
+               <itc:parameter name="width">100%</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+            </itc:threshold>
+
+            <h4>File System ${context/OBJECT_Name}: Available Space</h4>
+            <itc:threshold>
+               <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.Available</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="valuesOnly">true</itc:parameter>
+               <itc:parameter name="annotations">false</itc:parameter>
+               <itc:parameter name="width">100%</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+            </itc:threshold>
+            <itc:threshold>
+               <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.Available</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="valuesOnly">true</itc:parameter>
+               <itc:parameter name="annotations">false</itc:parameter>
+               <itc:parameter name="width">100%</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+            </itc:threshold>
+
+         </itc:section>
+      </itc:section>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">JMXP4</itc:parameter>
+      <itc:select name="OBJECT_Category">APL</itc:select>
+      <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+      <pbr />
+      <h2>${context/OBJECT_Name}</h2>
+      <itc:section>
+         <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+         <h3>App Server ${context/OBJECT_Name}: Linux File systems on ${context/SAPJ2EEClusterNode.HostName}</h3>
+         <itc:section>
+            <itc:parameter name="className">SSH2-Linux</itc:parameter>
+            <itc:select name="SSH2.EffectiveIPv4">${context/SAPJ2EEClusterNode.Host}</itc:select>
+            <itc:section>
+               <itc:parameter name="className">UnixFileSystem</itc:parameter>
+               <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+               <h4>File System ${context/OBJECT_Name}: Used %</h4>
+               <itc:threshold>
+                  <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.UsedPercent</itc:parameter>
+                  <itc:parameter name="table">false</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+                  <itc:parameter name="width">100%</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+               </itc:threshold>
+               <itc:threshold>
+                  <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.UsedPercent</itc:parameter>
+                  <itc:parameter name="table">true</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+                  <itc:parameter name="width">100%</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+               </itc:threshold>
+
+               <h4>File System ${context/OBJECT_Name}: Available Space</h4>
+               <itc:threshold>
+                  <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.Available</itc:parameter>
+                  <itc:parameter name="table">false</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+                  <itc:parameter name="width">100%</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+               </itc:threshold>
+               <itc:threshold>
+                  <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="THRESHOLD_AttributeName">UnixFileSystem.Available</itc:parameter>
+                  <itc:parameter name="table">true</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+                  <itc:parameter name="width">100%</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+               </itc:threshold>
+
+            </itc:section>
+         </itc:section>
+      </itc:section>
+   </itc:section>
+</itc:report>

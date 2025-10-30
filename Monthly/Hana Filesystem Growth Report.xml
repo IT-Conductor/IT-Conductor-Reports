@@ -1,0 +1,27 @@
+<!-- Param1  :  role -->
+
+<itc:report xmlns:itc="urn:itconductor">
+
+ <h1>${self/REPORT.Param1} - HANA Filesystem Growth Report - Available space and Used %</h1>
+   <itc:section>
+      <itc:parameter name="className">UnixFileSystem</itc:parameter>
+      <itc:select name="UnixFileSystem.MointPoint" oper="MATCH">(^/hana/log$)|(^/hana/data$)</itc:select>
+      <itc:select name="SERVICE.Role">${self/REPORT.Param1}</itc:select>
+      <itc:parameter name="sortAttr">ComputerService.Host</itc:parameter>
+      <itc:parameter name="sortOrder">ASC</itc:parameter>
+
+      <h2> ${context/APPLICATION_SERVICE.ApplicationId->OBJECT_Description}  ${context/UnixFileSystem.MointPoint} </h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6631887472313696</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">top</itc:parameter>
+
+      </itc:chart>
+
+
+   </itc:section>
+</itc:report>

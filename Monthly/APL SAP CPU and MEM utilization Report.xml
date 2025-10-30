@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <itc:parameter name="fontSize">4</itc:parameter>
+
+   <h1> APL ${self/REPORT.Param2}- SAP CPU &amp; MEM utilization Report</h1>
+   <pbr />
+
+   <itc:section>
+    <itc:parameter name="className">SAP</itc:parameter>
+    <itc:select name="OBJECT_Category">APL</itc:select>
+    <itc:select name="OBJECT_MaintenanceMode">false</itc:select>
+    <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+    <h2>${context/OBJECT_Name}</h2> 
+	
+    <itc:section>
+      <itc:parameter name="className">SAPAppServerService</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+      <h3>App Server ${context/OBJECT_Name}: CPU &amp; Memory on ${context/SAPService.AppServerHost}</h3>
+         <itc:section>
+            <itc:parameter name="className">UnixMachineService</itc:parameter>
+            <itc:select name="OBJECT_CustomerId">${context/OBJECT_CustomerId}</itc:select>
+            <itc:select name="ComputerService.Host">${context/SAPService.AppServerHost}</itc:select>
+            <h4>Unix machine : ${context/OBJECT_Name}</h4>
+            <itc:variable name="attributes">'CPU User' , 'CPU Idle', 'Memory Used', 'Swap Used'</itc:variable>
+            <itc:section>
+               <itc:parameter name="className">Threshold</itc:parameter>
+               <itc:select name="THRESHOLD_ApplicationId">${context/APPLICATION_SERVICE.ApplicationId}</itc:select>
+               <itc:select name="OBJECT_Name" oper="IN">${report/attributes}</itc:select>
+               <h4>${context/OBJECT_Name}</h4>
+               <itc:chart>
+                  <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="title">false</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+                  <itc:parameter name="fit">width</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+               </itc:chart>
+               <itc:chart>
+                  <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="title">false</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+                  <itc:parameter name="fit">width</itc:parameter>
+                  <itc:parameter name="table">true</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+               </itc:chart>
+            </itc:section>
+         </itc:section>
+      </itc:section>
+   </itc:section>
+
+
+<itc:section>
+    <itc:parameter name="className">JMXP4</itc:parameter>
+    <itc:select name="OBJECT_Category">APL</itc:select>
+    <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+    <pbr />
+    <h2>${context/OBJECT_Name}</h2> 
+	
+    <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+      <h3>App Server ${context/OBJECT_Name}: CPU &amp; Memory on ${context/SAPJ2EEClusterNode.HostName}</h3>
+         <itc:section>
+            <itc:parameter name="className">UnixMachineService</itc:parameter>
+            <itc:select name="ComputerService.IPv4">${context/SAPJ2EEClusterNode.Host}</itc:select>
+            <h4>Unix machine : ${context/OBJECT_Name}</h4>
+            <itc:variable name="attributes">'CPU User' , 'CPU Idle', 'Memory Used', 'Swap Used'</itc:variable>
+            <itc:section>
+               <itc:parameter name="className">Threshold</itc:parameter>
+               <itc:select name="THRESHOLD_ApplicationId">${context/APPLICATION_SERVICE.ApplicationId}</itc:select>
+               <itc:select name="OBJECT_Name" oper="IN">${report/attributes}</itc:select>
+               <h4>${context/OBJECT_Name}</h4>
+               <itc:chart>
+                  <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="title">false</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+                  <itc:parameter name="fit">width</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+               </itc:chart>
+               <itc:chart>
+                  <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+                  <itc:parameter name="title">false</itc:parameter>
+                  <itc:parameter name="timeScale">DAY</itc:parameter>
+                  <itc:parameter name="range">LM</itc:parameter>
+                  <itc:parameter name="fit">width</itc:parameter>
+                  <itc:parameter name="table">true</itc:parameter>
+                  <itc:parameter name="valuesOnly">true</itc:parameter>
+                  <itc:parameter name="annotations">false</itc:parameter>
+               </itc:chart>
+            </itc:section>
+         </itc:section>
+      </itc:section>
+   </itc:section>
+
+</itc:report>

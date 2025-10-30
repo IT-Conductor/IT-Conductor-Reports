@@ -1,0 +1,68 @@
+<itc:report xmlns:itc="urn:itconductor">
+
+<itc:variable name="attributes">'SSH2-Linux','SAPHostAgent', 'BObjBI','WinRM','HANA'</itc:variable>
+  
+<h1>ZP ${self/REPORT.Param1} System in MMode</h1>
+
+    <h2>Linux</h2>
+    <itc:query>
+        <itc:parameter name="className">SSH2-Linux</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+    <pbr/>
+    <h2>SAP J2EE</h2>
+    <itc:query>
+        <itc:parameter name="className">JMXP4</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+
+    <pbr/>
+    <h2>SAP Host Agent</h2>
+    <itc:query>
+        <itc:parameter name="className">SAPHostAgent</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+
+    <pbr/>
+    <h2>SAP Business Objects</h2>
+    <itc:query>
+        <itc:parameter name="className">BObjBI</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+
+    <pbr/>
+    <h2>Windows</h2>
+    <itc:query>
+        <itc:parameter name="className">WinRM</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+
+    <pbr/>
+    <h2>HANA</h2>
+    <itc:query>
+        <itc:parameter name="className">HANADb</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+
+    <pbr/>
+    <h2>SAP NW (ABAP) </h2>
+    <itc:query>
+        <itc:parameter name="className">SAPJCO2</itc:parameter>
+        <itc:select name="OBJECT_MaintenanceMode">true</itc:select>
+        <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+        <itc:parameter name="select">OBJECT_Name</itc:parameter>
+      </itc:query>
+     
+</itc:report>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Parameter1 for HANA Id  example HJC-->
+
+<itc:report xmlns:itc="urn:itconductor">
+
+    <!-- Get HANA object and then set its object id to variable -->
+    <itc:section>
+      <itc:parameter name="className">HANADb</itc:parameter>
+      <itc:select name="HANADb.SID">${self/REPORT.Param1}</itc:select>
+      <itc:variable name="HANAObjectId">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="HANASID">${context/HANADb.SID}</itc:variable>
+      <h1>HANA ${report/HANASID} Service Health and Utilization Report</h1>
+      <pbr/>
+
+      <!-- HANA Availability -->
+      <h2>HANA ${report/HANASID} Availability</h2>
+      <itc:threshold>
+        <itc:parameter name="THRESHOLD_ObjectId">${report/HANAObjectId}</itc:parameter>
+        <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+        <itc:parameter name="title">false</itc:parameter>
+        <itc:parameter name="table">false</itc:parameter>
+        <itc:parameter name="timeScale">HOUR</itc:parameter>
+        <itc:parameter name="range">H12</itc:parameter>
+        <itc:parameter name="fit">width</itc:parameter>
+      </itc:threshold>
+
+      <!-- HANA Service Performance Overview -->
+      <h2>HANA Service Performance Overview</h2>
+      <itc:chart>
+        <itc:parameter name="OBJECT_Id">6077053883419751</itc:parameter>
+        <itc:parameter name="context">${report/HANAObjectId}</itc:parameter>
+        <itc:parameter name="title">false</itc:parameter>
+        <itc:parameter name="timeScale">HOUR</itc:parameter>
+        <itc:parameter name="range">H12</itc:parameter>
+        <itc:parameter name="fit">width</itc:parameter>
+        <itc:parameter name="legend">top</itc:parameter>
+      </itc:chart>
+
+      <h2>HANA ${report/HANASID} Replication Backlog Time</h2>
+      <itc:section>
+        <itc:parameter name="className">HANAServiceReplication</itc:parameter>
+        <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/HANAObjectId}</itc:select>
+        <itc:select name="HANAServiceReplication.REPLICATION_STATUS">ACTIVE</itc:select>
+        <itc:threshold>
+          <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+          <itc:parameter name="THRESHOLD_AttributeName">HANAServiceReplication.BACKLOG_TIME</itc:parameter>
+          <itc:parameter name="title">false</itc:parameter>
+          <itc:parameter name="table">false</itc:parameter>
+          <itc:parameter name="timeScale">HOUR</itc:parameter>
+          <itc:parameter name="range">H12</itc:parameter>
+          <itc:parameter name="fit">width</itc:parameter>
+        </itc:threshold>
+      </itc:section>
+
+      <h2>HANA Volumes Used %</h2>
+      <itc:section>
+        <itc:parameter name="className">HANAVolumeFile</itc:parameter>
+        <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/HANAObjectId}</itc:select>
+        <itc:threshold>
+          <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+          <itc:parameter name="THRESHOLD_AttributeName">HANAVolumeFile.USED_PERCENT</itc:parameter>
+          <itc:parameter name="title">true</itc:parameter>
+          <itc:parameter name="table">false</itc:parameter>
+          <itc:parameter name="timeScale">HOUR</itc:parameter>
+          <itc:parameter name="range">H12</itc:parameter>
+          <itc:parameter name="fit">width</itc:parameter>
+        </itc:threshold>
+      </itc:section>
+
+  </itc:section>
+</itc:report>

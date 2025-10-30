@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <h1>${self/REPORT.Param2}- Hana Backup Report</h1>
+   <pbr />
+   <itc:section>
+      <itc:parameter name="className">HANADb</itc:parameter>
+    
+      <itc:variable name="HanaObjectId">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="HanaName">${context/OBJECT_Name}</itc:variable>
+
+      <itc:section>
+         <itc:parameter name="className">SQLScript</itc:parameter>
+         <itc:select name="ACTIVITY_QueueId">${context/OBJECT_Id}</itc:select>
+         <itc:select name="OBJECT_StatusId">70</itc:select>
+         <itc:select name="OBJECT_Category">${self/REPORT.Param1} ${auto/time(MM/yyyy)}</itc:select>
+         <itc:select name="ACTIVITY_isHistory">false</itc:select>
+
+         <h2> ${report/HanaName}</h2>
+         <h3>${context/OBJECT_Name}</h3>
+         <itc:attributetext>
+            <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="name">EXTERNAL_ACTIVITY.Log</itc:parameter>
+         </itc:attributetext>
+
+      </itc:section>
+   </itc:section>
+</itc:report>

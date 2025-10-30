@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Name :  Panasonic $[context/APPLICATION_Role] $[context/OBJECT_Name]/$[context/JMXP4.DBMS=>OBJECT_Name] Java Health KPI Daily Reports-->
+<!-- Parameter1 : $[context/OBJECT_Id] -->
+<!-- Oracle DB is automatically associated using DB in SAP App Properties-->
+<itc:report xmlns:itc="urn:itconductor">
+   <!-- Get SAP object and then set its object id to variable -->
+   <itc:section>
+      <itc:parameter name="className">JMXP4</itc:parameter>
+      <itc:select name="OBJECT_Id">${self/REPORT.Param1}</itc:select>
+      <itc:variable name="JAVAObjectId">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="JAVASID">${context/OBJECT_Name}</itc:variable>
+      <itc:variable name="OracleObjectId">${context/JMXP4.DBMS}</itc:variable>
+      <itc:variable name="OracleSID">${context/JMXP4.DBMS=&gt;OBJECT_Name}</itc:variable>
+   </itc:section>
+   <h1>Java ${report/JAVASID}/${report/OracleSID} Service Health and Utilization Report</h1>
+   <pbr />
+   
+   <h2>${report/JAVASID} Availability </h2>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/JAVAObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">false</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="valuesOnly">true</itc:parameter>
+      <itc:parameter name="annotations">false</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="timeScale">MONTH</itc:parameter>
+      <itc:parameter name="range">YTD</itc:parameter>
+   </itc:threshold>
+
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/JAVAObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">false</itc:parameter>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="valuesOnly">true</itc:parameter>
+      <itc:parameter name="annotations">false</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="timeScale">MONTH</itc:parameter>
+      <itc:parameter name="range">YTD</itc:parameter>
+   </itc:threshold>
+
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/JAVAObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">false</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="valuesOnly">true</itc:parameter>
+      <itc:parameter name="annotations">false</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="timeScale">DAY</itc:parameter>
+      <itc:parameter name="range">LM</itc:parameter>
+   </itc:threshold>
+
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/JAVAObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">false</itc:parameter>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="valuesOnly">true</itc:parameter>
+      <itc:parameter name="annotations">false</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="timeScale">DAY</itc:parameter>
+      <itc:parameter name="range">LM</itc:parameter>
+   </itc:threshold>
+
+   <pbr />
+
+   <!-- SAP JAVA System CPU Utilization  -->
+   <h2>SAP JAVA System CPU Utilization</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">CPU Utilization</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+   <pbr />
+   <!-- SAP JAVA System Memory Utilization  -->
+   <h2>SAP JAVA System Memory Utilization</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">Memory Utilization</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+   <pbr />
+   <!-- System Free Disk Space Percent  -->
+   <h2>System Free Disk Space Percent</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">Free Disk Space</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+   <pbr />
+
+   <!-- JVM GC Problems  -->
+   <h2>JVM GC Problems</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">GC Problems</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+   <pbr />
+
+   <!-- JVM Out Of Memory Errors  -->
+   <h2>JVM Out Of Memory Errors</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">Out Of Memory Errors</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+   <pbr />
+
+   <!-- JVM System Problems  -->
+   <h2>JVM System Problems</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/SAPJ2EEClusterNode.Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">System Problems</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+   <pbr />
+
+   <!-- SAP JAVA Server Average RFC Times  -->
+   <h2>SAP JAVA Server Average RFC Times</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPJ2EEClusterNode</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/JAVAObjectId}</itc:select>
+      <itc:variable name="clusterNode">${context/OBJECT_Name}</itc:variable>
+      <itc:section>
+         <itc:parameter name="className">SAPJMXMonitorMetric</itc:parameter>
+         <itc:select name="SAPJMXMetric.ClusterNode">${context/SAPJ2EEClusterNode.ID}</itc:select>
+         <itc:select name="SAPJMXMetric.MetricName">Average RFC Time</itc:select>
+         <h3>${report/clusterNode} ${context/SAPJMXMetric.ObjectShortName}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">SAPJMXMetric.MetricValue</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+  <pbr />
+
+   <h2>${report/JAVASID} HTTP Availability And Response Time</h2>
+   <itc:section>
+      <itc:parameter name="className">HttpApplication</itc:parameter>
+      <itc:select name="OBJECT_Description">J30 SOLMAN JAVA HTTP Availability</itc:select>
+      <itc:section>
+         <itc:parameter name="className">HTTPProbe</itc:parameter>
+         <itc:select name="ACTIVITY_QueueId">${context/OBJECT_Id}</itc:select>
+         <h3>${context/OBJECT_Name} HTTP Availability</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+            <itc:parameter name="title">true</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+         <h3>${context/OBJECT_Name} HTTP Response Time</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">HTTPActivity.ResponseTime</itc:parameter>
+            <itc:parameter name="title">true</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+   </itc:section>
+
+   <pbr />
+
+   <!-- Oracle related  sections in here -->
+   <h2>Oracle ${report/OracleSID} Availability</h2>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/OracleObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">true</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">DAY</itc:parameter>
+      <itc:parameter name="range">LM</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+   </itc:threshold>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/OracleObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">true</itc:parameter>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="valuesOnly">true</itc:parameter>
+      <itc:parameter name="timeScale">DAY</itc:parameter>
+      <itc:parameter name="range">LM</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+   </itc:threshold>
+
+ 
+
+ <pbr />
+   <h2>Oracle ${report/OracleSID} Backup</h2>
+   <itc:query>
+      <itc:parameter name="className">SAPDBOracleBackup</itc:parameter>
+      <itc:select name="SAPRecord.SID">${report/SAPSID}</itc:select>
+      <itc:select name="TRANSACTION.TimeBegin" oper="GT">${auto/timestamp<1month}</itc:select>
+      <itc:select name="TRANSACTION.TimeBegin" oper="LT">${auto/timestamp<0month}</itc:select>
+      <itc:parameter name="select">TRANSACTION.ApplicationId,TRANSACTION.TimeBegin,TRANSACTION.TimeEnd,SAPDBOracleBackup.FUNCT,SAPDBOracleBackup.RC,SAPDBOracleBackup.ACTID</itc:parameter>
+   </itc:query>
+   <p>0000 - Backup successful.
+0001 - Backup ended with warnings. All files were backed up.
+0002 - Backup was terminated in the initialization phase by a user or other signal.
+0003 - Errors occurred in the initialization phase; backup was not started.
+0004 - Backup was terminated during processing by a user or other signal.
+0005 - Backup was started but not finished, because errors occurred during processing.</p>
+
+   <pbr />
+
+   <h2>Oracle DB Total Size</h2>
+   <itc:section>
+      <itc:parameter name="className">OracleTablespace</itc:parameter>
+      <itc:select name="OracleTablespace.Name">*TOTAL*</itc:select>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/OracleObjectId}</itc:select>
+      <itc:threshold>
+         <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="THRESHOLD_AttributeName">OracleTablespace.SIZE_USED_PCT</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+      </itc:threshold>
+      <itc:threshold>
+         <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="THRESHOLD_AttributeName">OracleTablespace.SIZE_USED_PCT</itc:parameter>
+         <itc:parameter name="table">true</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+      </itc:threshold>
+      <h3>DB Total Size  Growth</h3>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">7067241823401570</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">MONTH</itc:parameter>
+         <itc:parameter name="range">YTD</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">7067241823401570</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">true</itc:parameter>
+         <itc:parameter name="timeScale">MONTH</itc:parameter>
+         <itc:parameter name="range">YTD</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <pbr />
+   <h2>Oracle ${report/OracleSID} Tablespace  %</h2>
+   <itc:section>
+      <itc:parameter name="className">OracleSpaceContainer</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/OracleObjectId}</itc:select>
+      <h3>Used Space %</h3>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536780585954720</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536780585954720</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">true</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+      <h3>Used Space Total</h3>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536854871911812</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536854871911812</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">true</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="timeScale">DAY</itc:parameter>
+         <itc:parameter name="range">LM</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">OracleInstanceService</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/OracleObjectId}</itc:select>
+      <itc:section>
+         <itc:parameter name="className">SSH2-Linux</itc:parameter>
+         <itc:select name="SSH2.EffectiveIPv4">${context/OracleInstance.HOST_IPV4}</itc:select>
+         <pbr />
+         <h2>CPU Utilization</h2>
+         <h3>Idle CPU Time in Percent</h3>
+         <itc:section>
+            <itc:parameter name="className">VMStatRecordLinux</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060282511238837</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060282511238837</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <h3>CPU System Utilization in Percent</h3>
+         <itc:section>
+            <itc:parameter name="className">VMStatRecordLinux</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060282405569929</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060282405569929</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <h3>CPU User Utilization in  Percent</h3>
+         <itc:section>
+            <itc:parameter name="className">VMStatRecordLinux</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060276969874389</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7060276969874389</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <pbr />
+         <h2>${context/OBJECT_Name} Page In</h2>
+         <itc:section>
+            <itc:parameter name="className">VMStatRecordLinux</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <h3>${context/OBJECT_Name}</h3>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059927865332197</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059927865332197</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <pbr />
+         <h2>${context/OBJECT_Name} Page Out</h2>
+         <itc:section>
+            <itc:parameter name="className">VMStatRecordLinux</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <h3>${context/OBJECT_Name}</h3>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059931088368427</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059931088368427</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <pbr />
+         <h2>${context/OBJECT_Name} Disk Response Time</h2>
+         <itc:section>
+            <itc:parameter name="className">UnixIODevice</itc:parameter>
+            <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+            <h3>${context/OBJECT_Name}</h3>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059899820678431</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059899820678431</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+         <pbr />
+         <h2>${context/OBJECT_Name} LAN Data Transferred</h2>
+         <itc:section>
+            <itc:parameter name="className">IFStatRecord</itc:parameter>
+            <itc:select name="METRIC.PerformerId">${context/OBJECT_Id}</itc:select>
+            <h3>${context/OBJECT_Name}</h3>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059920391232219</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">7059920391232219</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="timeScale">DAY</itc:parameter>
+               <itc:parameter name="range">LM</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="legend">top</itc:parameter>
+            </itc:chart>
+         </itc:section>
+      </itc:section>
+   </itc:section>
+</itc:report>

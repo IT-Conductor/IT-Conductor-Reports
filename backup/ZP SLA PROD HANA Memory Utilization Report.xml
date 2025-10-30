@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <itc:parameter name="fontSize">4</itc:parameter>
+   <h1>Production HANA Systems Memory Use Report</h1>
+   <pbr />
+
+<!-- this section -->
+   <itc:section>
+      <itc:parameter name="OBJECT_ClassName">HANADb</itc:parameter>
+      <itc:parameter name="className">HANADb</itc:parameter>
+      <itc:select name="OBJECT_CustomerId">${report/OBJECT_CustomerId}</itc:select>
+      <itc:select name="APPLICATION_Role">PROD</itc:select>
+
+      <h2>${context/OBJECT_Name}</h2>
+
+<!-- this section -->
+      <itc:section>
+         <itc:parameter name="className">HANAHost</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+         <h3>${context/HANAHost.HOST}</h3>
+
+<!-- this section -->
+         <itc:section>
+            <itc:parameter name="className">UnixMachineService</itc:parameter>
+            <itc:select name="OBJECT_CustomerId">${context/OBJECT_CustomerId}</itc:select>
+            <itc:select name="ComputerService.Host">${context/HANAHost.HOST}</itc:select>
+            <itc:section>
+               <itc:parameter name="className">NixMemoryUsageRecord</itc:parameter>
+               <itc:select name="METRIC.PerformerId">${context/APPLICATION_SERVICE.ApplicationId}</itc:select>
+
+               <h3>${context/OBJECT_Name}</h3>
+
+<!-- this -->
+			   <itc:chart>
+				   <itc:parameter name="OBJECT_Id">6343293634683744</itc:parameter>
+				   <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+                                   <itc:parameter name="excludeCategory.6343301763830552">true</itc:parameter>
+				   <itc:parameter name="title">true</itc:parameter>
+				   <itc:parameter name="table">false</itc:parameter>
+				   <itc:parameter name="fit">width</itc:parameter>
+				   <itc:parameter name="annotation">false</itc:parameter>
+				   <itc:parameter name="timeScale">DAY</itc:parameter>
+				   <itc:parameter name="range">LM</itc:parameter>
+			   </itc:chart>
+			   <itc:chart>
+				   <itc:parameter name="OBJECT_Id">6343293634683744</itc:parameter>
+				   <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+				   <itc:parameter name="title">true</itc:parameter>
+				   <itc:parameter name="table">true</itc:parameter>
+				   <itc:parameter name="fit">width</itc:parameter>
+				   <itc:parameter name="annotation">false</itc:parameter>
+				   <itc:parameter name="timeScale">DAY</itc:parameter>
+				   <itc:parameter name="range">LM</itc:parameter>
+			   </itc:chart>
+                          <pbr />
+            </itc:section>
+         </itc:section>
+      </itc:section>
+   </itc:section>
+</itc:report>

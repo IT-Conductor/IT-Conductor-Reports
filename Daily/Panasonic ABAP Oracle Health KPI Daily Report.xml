@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAP loaded from context for ABAP to get SAP SID example ECP-->
+<!-- Oracle DB is automatically associated using DB in SAP App Properties-->
+<itc:report xmlns:itc="urn:itconductor">
+   <!-- Get SAP object and then set its object id to variable -->
+   <itc:section>
+      <itc:parameter name="className">SAP</itc:parameter>
+      <itc:select name="OBJECT_Id">${self/REPORT.Param1}</itc:select>
+      <itc:variable name="SAPObjectId">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="SAPSID">${context/SAP.SID}</itc:variable>
+      <itc:variable name="OracleObjectId">${context/SAP.DBMS}</itc:variable>
+      <itc:variable name="OracleSID">${context/SAP.DBMS=&gt;OBJECT_Name}</itc:variable>
+   </itc:section>
+   <h1>${report/SAPSID}/${report/OracleSID} Service Health and Utilization Report</h1>
+   <pbr />
+   <!-- SAP Availability -->
+   <h2>SAP System ${report/SAPSID} Availability</h2>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">true</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+   </itc:threshold>
+   <!-- SAP Performance Overview -->
+   <h2>${report/SAPSID} SAP Performance Overview</h2>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">23146379</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">bottom</itc:parameter>
+   </itc:chart>
+   <h2>App Servers Overview</h2>
+   <itc:section>
+      <itc:parameter name="className">SAP_AppServer</itc:parameter>
+      <itc:select name="ACTIVITY_QueueId">${report/SAPObjectId}</itc:select>
+      <h3>Application Server ${context/OBJECT_Name} Availability</h3>
+      <itc:section>
+         <itc:parameter name="className">Threshold</itc:parameter>
+         <itc:select name="THRESHOLD_CurrentMonitorId">${report/SAPObjectId}</itc:select>
+         <itc:select name="THRESHOLD_AttributeName">OBJECT_Availability</itc:select>
+         <itc:chart>
+            <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="timeScale">HOUR</itc:parameter>
+            <itc:parameter name="range">H24</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+         </itc:chart>
+      </itc:section>
+   </itc:section>
+   <h2>${report/SAPSID} CCMS Alerts Summary</h2>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">8279134</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">top</itc:parameter>
+   </itc:chart>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">8279134</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">top</itc:parameter>
+   </itc:chart>
+   <itc:section>
+      <itc:parameter name="className">SAPJobDefinitionThresholdCollection</itc:parameter>
+      <itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPJobDefinition.STATUS</itc:select>
+      <h2>Aborted Background Jobs</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="width1">100%</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H24</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="annotations">false</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <!-- Oracle related  sections in here -->
+   <h2>Oracle ${report/OracleSID} Availability</h2>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/OracleObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">true</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+   </itc:threshold>
+   <h2>Oracle ${report/OracleSID} Tablespace  %</h2>
+   <itc:section>
+      <itc:parameter name="className">OracleSpaceContainer</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/OracleObjectId}</itc:select>
+      <h3>Used Space %</h3>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536780585954720</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H24</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+      <h3>Used Space Total</h3>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6536854871911812</itc:parameter>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H24</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="legend">bottom</itc:parameter>
+      </itc:chart>
+   </itc:section>
+</itc:report>

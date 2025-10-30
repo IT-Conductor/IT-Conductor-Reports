@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <h1>APL ${self/REPORT.Param2}- Hana Backup Report</h1>
+   <pbr />
+   <itc:section>
+      <itc:parameter name="className">HANADb</itc:parameter>
+      <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+      <itc:select name="OBJECT_Category">APL</itc:select>
+      <h2>${context/OBJECT_Name}</h2>
+      <itc:query>
+         <itc:parameter name="className">HANABackup</itc:parameter>
+         <itc:select name="TRANSACTION.ApplicationId">${context/OBJECT_Id}</itc:select>
+         <itc:select name="HANABackup.UTC_START_TIME" oper="GT">${auto/timestamp<1month}</itc:select>
+         <itc:select name="HANABackup.UTC_START_TIME" oper="LT">${auto/timestamp<0month}</itc:select>
+         <itc:parameter name="select">TRANSACTION.ApplicationId,HANABackup.ENTRY_TYPE_NAME,HANABackup.UTC_START_TIME,HANABackup.UTC_END_TIME,HANABackup.BACKUP_SIZE,HANABackup.RUNTIME,HANABackup.RATE</itc:parameter>
+         <itc:parameter name="sortAttr">HANABackup.UTC_START_TIME</itc:parameter>
+         <itc:parameter name="sortOrder">ASC</itc:parameter>
+      </itc:query>
+   </itc:section>
+</itc:report>

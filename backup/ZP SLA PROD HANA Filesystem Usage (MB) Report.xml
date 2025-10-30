@@ -1,0 +1,55 @@
+<itc:report xmlns:itc="urn:itconductor">
+  <itc:parameter name="fontSize">4</itc:parameter>
+  <h1>Production HANA Systems File System Report</h1>
+
+<!-- this section -->
+  <itc:section>
+    <itc:parameter name="OBJECT_ClassName">HANADb</itc:parameter>
+    <itc:parameter name="className">HANADb</itc:parameter>
+    <itc:select name="OBJECT_CustomerId">${report/OBJECT_CustomerId}</itc:select>
+    <itc:select name="APPLICATION_Role">PROD</itc:select>
+
+    <pbr />
+    <h2>${context/OBJECT_Name}</h2> 
+
+<!-- this section -->
+    <itc:section>
+      <itc:parameter name="className">HANAHost</itc:parameter>
+      <itc:select name="APPLICATION_SERVICE.ApplicationId">${context/OBJECT_Id}</itc:select>
+      <h3>${context/HANAHost.HOST}</h3>
+
+<!-- this section -->
+      <itc:section>
+        <itc:parameter name="className">UnixFileSystem</itc:parameter>
+        <itc:select name="OBJECT_CustomerId">${context/OBJECT_CustomerId}</itc:select>
+        <itc:select name="ComputerService.Host">${context/HANAHost.HOST}</itc:select>
+        <itc:select name="UnixFileSystem.MointPoint" oper="MATCH">(^/hana/log$)|(^/hana/data$)|(^/hana/shared$)</itc:select>
+  
+<!-- this -->
+        <h4>${context/UnixFileSystem.MointPoint}</h4>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">6341789598041480</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="excludeCategory.6341790433453279">true</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="table">false</itc:parameter>
+               <itc:parameter name="annotation">false</itc:parameter>
+               <itc:parameter name="timeScale">MONTH</itc:parameter>
+               <itc:parameter name="range">M12</itc:parameter>
+            </itc:chart>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">6341789598041480</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="table">true</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+               <itc:parameter name="annotation">false</itc:parameter>
+               <itc:parameter name="timeScale">MONTH</itc:parameter>
+               <itc:parameter name="range">M12</itc:parameter>
+            </itc:chart>
+
+      </itc:section>
+   </itc:section>
+
+  </itc:section>
+</itc:report>

@@ -1,0 +1,9 @@
+<itc:report xmlns:itc="urn:itconductor">
+<itc:alerts>
+  <itc:parameter name="className">Alert</itc:parameter>
+  <itc:select name="ALERT.ROLE" oper="EQ">$[context/SERVICE.Role]</itc:select>
+  <itc:parameter name="range">WTD</itc:parameter>
+  <itc:parameter name="sortAttr">ALERT.Time</itc:parameter>
+  <itc:parameter name="sortOrder">ASC</itc:parameter>
+</itc:alerts>
+</itc:report>

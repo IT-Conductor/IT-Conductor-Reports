@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <itc:section>
+      <itc:parameter name="className">WinRM</itc:parameter>
+
+      <itc:variable name="systemid">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="attributes">'OBJECT_Availability', 'WindowsMetric_PerfOS_Processor.PercentProcessorTime','WindowsMetric_PerfOS_Memory.AvailableMBytes', 'WindowsLogicalDisk.FreeSpacePercent'</itc:variable>
+      <h1>${self/REPORT.Param2} - Windows Availability Usage Report</h1>
+      <itc:section>
+         <itc:parameter name="className">Threshold</itc:parameter>
+         <itc:select name="THRESHOLD_ApplicationId">${report/systemid}</itc:select>
+         <itc:select name="THRESHOLD_AttributeName" oper="IN">${report/attributes}</itc:select>
+         <h2>${context/OBJECT_ParentId->WindowsLogicalDisk.DeviceID} ${name:context/OBJECT_ParentId} ${context/OBJECT_Name} </h2>
+         <itc:chart>
+            <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="timeStep">20</itc:parameter>
+            <itc:parameter name="timeScale">DAY</itc:parameter>
+            <itc:parameter name="range">LM</itc:parameter>
+            <itc:parameter name="annotations">false</itc:parameter>
+            <itc:parameter name="excludeCategory.Alarm">true</itc:parameter>
+            <itc:parameter name="excludeCategory.Warning">true</itc:parameter>
+            <itc:parameter name="excludeCategory.Severity">true</itc:parameter>
+         </itc:chart>
+      </itc:section>
+   </itc:section>
+</itc:report>

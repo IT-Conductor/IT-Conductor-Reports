@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Name: APL ZP $[context/APPLICATION_Role]  $[context/SAP.SID]/$[context/SAP.DBMS=>OBJECT_Name]   ABAP Health KPI Daily Reports -->
+<!-- Parameter1: $[context/OBJECT_Id]-->
+<!-- DB is automatically associated using DB in SAP App Properties-->
+<itc:report xmlns:itc="urn:itconductor">
+   <!-- Get SAP object and then set its object id to variable -->
+   <itc:section>
+      <itc:parameter name="className">SAP</itc:parameter>
+      <itc:select name="OBJECT_Id">${self/REPORT.Param1}</itc:select>
+      <itc:variable name="SAPObjectId">${context/OBJECT_Id}</itc:variable>
+      <itc:variable name="SAPSID">${context/SAP.SID}</itc:variable>
+      <itc:variable name="dbId">${context/SAP.DBMS}</itc:variable>
+      <itc:variable name="db">${context/SAP.DBMS=&gt;OBJECT_Name}</itc:variable>
+      <itc:variable name="dbClass">${context/SAP.DBMS=&gt;OBJECT_ClassName}</itc:variable>
+   </itc:section>
+   <h1>${report/SAPSID}/${report/db} Service Health and Utilization Report</h1>
+   <pbr />
+   <!-- SAP Availability -->
+   <h2>SAP System ${report/SAPSID} Availability</h2>
+   <itc:threshold>
+      <itc:parameter name="THRESHOLD_ObjectId">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+      <itc:parameter name="title">true</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H12</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+   </itc:threshold>
+   <!-- SAP Performance Overview -->
+   <h2>${report/SAPSID} SAP Performance Overview</h2>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">23146379</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H12</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">top</itc:parameter>
+   </itc:chart>
+   <h2>App Servers Overview</h2>
+   <itc:section>
+      <itc:parameter name="className">SAP_AppServer</itc:parameter>
+      <itc:select name="ACTIVITY_QueueId">${report/SAPObjectId}</itc:select>
+      <h3>SAP System ${context/OBJECT_Name}</h3>
+      <itc:section>
+         <itc:parameter name="className">Threshold</itc:parameter>
+         <itc:select name="THRESHOLD_CurrentMonitorId">${report/SAPObjectId}</itc:select>
+         <itc:select name="THRESHOLD_AttributeName">OBJECT_Availability</itc:select>
+         <itc:chart>
+            <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="timeScale">HOUR</itc:parameter>
+            <itc:parameter name="range">H12</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+            <itc:parameter name="title">false</itc:parameter>
+         </itc:chart>
+      </itc:section>
+   </itc:section>
+   <h2>${report/SAPSID} CCMS Alerts Categories</h2>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">8279134</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="table">false</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">top</itc:parameter>
+   </itc:chart>
+   <itc:chart>
+      <itc:parameter name="OBJECT_Id">8279134</itc:parameter>
+      <itc:parameter name="context">${report/SAPObjectId}</itc:parameter>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+      <itc:parameter name="range">H24</itc:parameter>
+      <itc:parameter name="fit">width</itc:parameter>
+      <itc:parameter name="legend">top</itc:parameter>
+   </itc:chart>
+   <!-- hanadb related sections in here -->
+   <itc:if>
+      <itc:parameter name="mode">variables</itc:parameter>
+      <itc:select name="dbClass">HANADb</itc:select>
+      <!-- HANA Availability -->
+      <h2>HANA ${report/db} Availability</h2>
+      <itc:threshold>
+         <itc:parameter name="THRESHOLD_ObjectId">${report/dbId}</itc:parameter>
+         <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+         <itc:parameter name="title">true</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H24</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+      </itc:threshold>
+      <!-- HANA Performance Overview -->
+      <h2>${report/db} HANA Performance Overview</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">6077053883419751</itc:parameter>
+         <itc:parameter name="context">${report/dbId}</itc:parameter>
+         <itc:parameter name="range">H24</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="legend">top</itc:parameter>
+      </itc:chart>
+      <h2>HANA ${report/db} Replication Backlog Time</h2>
+      <itc:section>
+         <itc:parameter name="className">HANAServiceReplication</itc:parameter>
+         <!--<itc:select name="APPLICATION_SERVICE.ApplicationId">${report/dbId}</itc:select>-->
+         <itc:select name="HANAComponentService.SystemID">${report/db}</itc:select>
+         <itc:select name="HANAServiceReplication.REPLICATION_STATUS">ACTIVE</itc:select>
+         <h3>${context/OBJECT_Name}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">HANAServiceReplication.BACKLOG_TIME</itc:parameter>
+            <itc:parameter name="title">true</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">HOUR</itc:parameter>
+            <itc:parameter name="range">H24</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+      <h2>HANA ${report/db} Volumes Used %</h2>
+      <itc:section>
+         <itc:parameter name="className">HANAVolumeFile</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/dbId}</itc:select>
+         <itc:select name="HANAVolumeFile.FILE_TYPE">DATA</itc:select>
+         <h3>${context/OBJECT_Name}</h3>
+         <itc:threshold>
+            <itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+            <itc:parameter name="THRESHOLD_AttributeName">HANAVolumeFile.USED_PERCENT</itc:parameter>
+            <itc:parameter name="title">true</itc:parameter>
+            <itc:parameter name="table">false</itc:parameter>
+            <itc:parameter name="timeScale">HOUR</itc:parameter>
+            <itc:parameter name="range">H24</itc:parameter>
+            <itc:parameter name="fit">width</itc:parameter>
+         </itc:threshold>
+      </itc:section>
+      <!-- DB Server Linux Performance Overview -->
+      <h2>DB Server Linux Performance Overview</h2>
+      <itc:section>
+         <itc:parameter name="className">HANAHost</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/dbId}</itc:select>
+         <itc:section>
+            <itc:parameter name="className">SSH2-Linux</itc:parameter>
+            <itc:select name="SSH2.EffectiveHost">${context/HANAHost.HOST}</itc:select>
+            <h3>${context/OBJECT_Name}</h3>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">54508500</itc:parameter>
+               <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="title">true</itc:parameter>
+               <itc:parameter name="timeScale">HOUR</itc:parameter>
+               <itc:parameter name="range">H24</itc:parameter>
+               <itc:parameter name="fit">width</itc:parameter>
+            </itc:chart>
+         </itc:section>
+      </itc:section>
+   </itc:if>
+   <!-- ase related sections in here -->
+   <itc:if>
+      <itc:parameter name="mode">variables</itc:parameter>
+      <itc:select name="dbClass">ASE</itc:select>
+      <!-- ASE Availability -->
+      <h2>ASE  Availability</h2>
+      <itc:threshold>
+         <itc:parameter name="THRESHOLD_ObjectId">${report/dbId}</itc:parameter>
+         <itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+         <itc:parameter name="title">true</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H12</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+      </itc:threshold>
+      <h2>ASE DB Devices</h2>
+      <itc:section>
+         <itc:parameter name="className">ASEDevice</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/dbId}</itc:select>
+         <h3>${context/OBJECT_Name}  ${context/APPLICATION_SERVICE.ApplicationId}</h3>
+         <itc:section>
+            <itc:parameter name="className">ASEMetricThreshold</itc:parameter>
+            <itc:select name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:select>
+            <itc:select name="THRESHOLD_AttributeName" oper="IN">ASEDevice.FreeSpacePercent</itc:select>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="timeStep">20</itc:parameter>
+               <itc:parameter name="timeScale">HOUR</itc:parameter>
+               <itc:parameter name="range">H12</itc:parameter>
+            </itc:chart>
+         </itc:section>
+      </itc:section>
+      <h2>ASE DB Used Space</h2>
+      <itc:section>
+         <itc:parameter name="className">ASEDataBase</itc:parameter>
+         <itc:select name="APPLICATION_SERVICE.ApplicationId">${report/dbId}</itc:select>
+         <h3>${context/OBJECT_Name}</h3>
+         <itc:section>
+            <itc:parameter name="className">ASEDbMetricThreshold</itc:parameter>
+            <itc:select name="THRESHOLD_ApplicationId">${context/APPLICATION_SERVICE.ApplicationId}</itc:select>
+            <itc:select name="THRESHOLD_AttributeName" oper="IN">ASEDbSizeMetric.UsedPercent</itc:select>
+            <itc:select name="ASEDbMetricThreshold.DBID">${context/ASEDB.ID}</itc:select>
+            <itc:chart>
+               <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+               <itc:parameter name="timeStep">20</itc:parameter>
+               <itc:parameter name="timeScale">HOUR</itc:parameter>
+               <itc:parameter name="range">H12</itc:parameter>
+               <itc:parameter name="height">200</itc:parameter>
+               <!-- Change height to 200 pixels -->
+            </itc:chart>
+         </itc:section>
+      </itc:section>
+   </itc:if>
+   <h2>Background Jobs Runtime (In-flight)</h2>
+   <itc:alerts>
+      <!-- Target Alerts Criteria -->
+      <itc:parameter name="className">CCMSJobObjectAlert</itc:parameter>
+      <itc:select name="ObjectAlert.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="ALERT.Message" oper="MATCH">Long Running Job</itc:select>
+      <itc:select name="ALERT.Time" oper="GT">${auto/timestamp&lt;1d}</itc:select>
+      <itc:parameter name="table">true</itc:parameter>
+      <itc:parameter name="width">100%</itc:parameter>
+      <itc:parameter name="timeScale">HOUR</itc:parameter>
+   </itc:alerts>
+   <h2>${report/SAPSID} Alerts ALL</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPCCMSAlertAggregator</itc:parameter>
+      <itc:select name="SAPAggregator.ApplicationId ">${report/SAPObjectId}</itc:select>
+      <itc:select name="OBJECT_Name">All</itc:select>
+      <itc:chart>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="OBJECT_Id">6673990167889035</itc:parameter>
+         <itc:parameter name="title">true</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H12</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <h2>${report/SAPSID} Failed Batch Jobs</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPCCMSAlertAggregator</itc:parameter>
+      <itc:select name="SAPAggregator.ApplicationId ">${report/SAPObjectId}</itc:select>
+      <itc:select name="OBJECT_Name">Failed Batch Jobs</itc:select>
+      <itc:chart>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="OBJECT_Id">6673990167889035</itc:parameter>
+         <itc:parameter name="title">true</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H12</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <h2>${report/SAPSID} ST22 Shortdumps</h2>
+   <itc:section>
+      <itc:parameter name="className">SAPCCMSAlertAggregator</itc:parameter>
+      <itc:select name="SAPAggregator.ApplicationId ">${report/SAPObjectId}</itc:select>
+      <itc:select name="OBJECT_Name">Shortdumps</itc:select>
+      <itc:chart>
+         <itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="OBJECT_Id">6673990167889035</itc:parameter>
+         <itc:parameter name="title">true</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">H12</itc:parameter>
+         <itc:parameter name="fit">width</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">SAPqRFCInboundThresholdCollection</itc:parameter>
+      <itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPRFCQueue.FAGE</itc:select>
+      <h2>tRFC and qRFC Inbound Queue First Entry Age</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="width1">100%</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">LD</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="annotations">false</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">SAPqRFCInboundThresholdCollection</itc:parameter>
+      <itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPRFCQueue.QSTATE_NAME</itc:select>
+      <h2>tRFC and qRFC Inbound Queue Queue State</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="width1">100%</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">LD</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="annotations">false</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">SAPqRFCOutboundThresholdCollection</itc:parameter>
+      <itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPRFCQueue.FAGE</itc:select>
+      <h2>tRFC and qRFC OutBound Queue First Entry Age</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="width1">100%</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">LD</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="annotations">false</itc:parameter>
+      </itc:chart>
+   </itc:section>
+   <itc:section>
+      <itc:parameter name="className">SAPqRFCOutboundThresholdCollection</itc:parameter>
+      <itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+      <itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPRFCQueue.QSTATE_NAME</itc:select>
+      <h2>tRFC and qRFC OutBound Queue Queue State</h2>
+      <itc:chart>
+         <itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+         <itc:parameter name="table">false</itc:parameter>
+         <itc:parameter name="width1">100%</itc:parameter>
+         <itc:parameter name="timeScale">HOUR</itc:parameter>
+         <itc:parameter name="range">LD</itc:parameter>
+         <itc:parameter name="valuesOnly">true</itc:parameter>
+         <itc:parameter name="annotations">false</itc:parameter>
+      </itc:chart>
+   </itc:section>
+</itc:report>

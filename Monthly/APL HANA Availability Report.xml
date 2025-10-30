@@ -1,0 +1,37 @@
+<itc:report
+	xmlns:itc="urn:itconductor">
+	<itc:variable name="tenantId">${self/REPORT.Param1}</itc:variable>
+	<h1>APL ${self/REPORT.Param2} - HANA Availability Report </h1>
+	
+	<itc:section>
+		<itc:parameter name="className">HANADb</itc:parameter>
+		<itc:select name="OBJECT_Category">APL</itc:select>
+		<itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+		<itc:select name="OBJECT_MaintenanceMode">false</itc:select>
+		<itc:select name="APPLICATION_StandByMode">false</itc:select>
+		<itc:variable name="HANAObjectId">${context/OBJECT_Id}</itc:variable>
+		<itc:variable name="HANASID">${context/HANADb.SID}</itc:variable>
+		<h2>${report/HANASID} Availability</h2>
+		<!-- HANA Availability -->
+		<itc:threshold>
+			<itc:parameter name="THRESHOLD_ObjectId">${report/HANAObjectId}</itc:parameter>
+			<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+			<itc:parameter name="title">true</itc:parameter>
+			<itc:parameter name="table">false</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="fit">width</itc:parameter>
+		</itc:threshold>
+		
+		<itc:threshold>
+			<itc:parameter name="THRESHOLD_ObjectId">${report/HANAObjectId}</itc:parameter>
+			<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+			<itc:parameter name="title">true</itc:parameter>
+			<itc:parameter name="table">true</itc:parameter>
+			<itc:parameter name="valuesOnly">true</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="fit">width</itc:parameter>
+		</itc:threshold>
+	</itc:section>
+</itc:report>

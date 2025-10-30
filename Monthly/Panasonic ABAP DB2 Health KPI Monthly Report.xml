@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SAP loaded from context for ABAP to get SAP SID example SD1-->
+<!-- DB2 DB is automatically associated using DB in SAP App Properties-->
+<itc:report
+	xmlns:itc="urn:itconductor">
+	<!-- Get SAP object and then set its object id to variable -->
+	<itc:section>
+		<itc:parameter name="className">SAP</itc:parameter>
+		<itc:select name="OBJECT_Id">${self/REPORT.Param1}</itc:select>
+		<itc:variable name="SAPObjectId">${context/OBJECT_Id}</itc:variable>
+		<itc:variable name="SAPSID">${context/SAP.SID}</itc:variable>
+		<itc:variable name="DB2ObjectId">${context/SAP.DBMS}</itc:variable>
+		<itc:variable name="DB2SID">${context/SAP.DBMS=>OBJECT_Name}</itc:variable>
+		<h1>${context/SAP.SID} Service Health and Utilization Report</h1>
+		<pbr />
+		<!-- SAP Availability -->
+		<h2>System Availability</h2>
+		<itc:threshold>
+			<itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+			<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+			<itc:parameter name="title">true</itc:parameter>
+			<itc:parameter name="table">false</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="fit">width</itc:parameter>
+		</itc:threshold>
+		<!-- SAP Performance Overview -->
+		<h2>SAP Performance Overview</h2>
+		<itc:chart>
+			<itc:parameter name="OBJECT_Id">23146379</itc:parameter>
+			<itc:parameter name="context">${context/OBJECT_Id}</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="fit">width</itc:parameter>
+			<itc:parameter name="legend">top</itc:parameter>
+		</itc:chart>
+		<h2>App Servers Overview</h2>
+		<itc:section>
+			<itc:parameter name="className">SAP_AppServer</itc:parameter>
+			<itc:select name="ACTIVITY_QueueId">${context/OBJECT_Id}</itc:select>
+			<h3>${context/SAP_AppServer.Name}</h3>
+			<!-- app server availability -->
+			<itc:threshold>
+				<itc:parameter name="className">Threshold</itc:parameter>
+				<itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+				<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+				<itc:parameter name="timeScale">DAY</itc:parameter>
+				<itc:parameter name="range">LM</itc:parameter>
+				<itc:parameter name="fit">width</itc:parameter>
+				<itc:parameter name="title">true</itc:parameter>
+			</itc:threshold>
+			<!-- app server response time -->
+			<itc:chart>
+				<itc:parameter name="className">SAPPerfMetricThreshold</itc:parameter>
+				<itc:instance>
+					<itc:select name="THRESHOLD_ApplicationId">${context/ACTIVITY_QueueId}</itc:select>
+					<itc:select name="SAPMetricThreshold.Context">${context/SAP_AppServer.Name}</itc:select>
+					<itc:select name="SAPMetricThreshold.ObjectName">Dialog</itc:select>
+					<itc:select name="SAPMetricThreshold.ShortName">ResponseTime</itc:select>
+				</itc:instance>
+				<itc:parameter name="timeScale">DAY</itc:parameter>
+				<itc:parameter name="range">LM</itc:parameter>
+				<itc:parameter name="fit">width</itc:parameter>
+				<itc:parameter name="title">true</itc:parameter>
+			</itc:chart>
+		</itc:section>
+		<itc:section>
+			<itc:parameter name="className">SAPJobDefinitionThresholdCollection</itc:parameter>
+			<itc:select name="THRESHOLD_COLLECTION.ApplicationId">${report/SAPObjectId}</itc:select>
+			<itc:select name="THRESHOLD_COLLECTION.ValueAttributeName">SAPJobDefinition.STATUS</itc:select>
+			<h2>Aborted Background Jobs</h2>
+			<itc:chart>
+				<itc:parameter name="OBJECT_Id">${context/OBJECT_Id}</itc:parameter>
+				<itc:parameter name="table">false</itc:parameter>
+				<itc:parameter name="width1">100%</itc:parameter>
+				<itc:parameter name="timeScale">DAY</itc:parameter>
+				<itc:parameter name="range">LM</itc:parameter>
+				<itc:parameter name="valuesOnly">true</itc:parameter>
+				<itc:parameter name="annotations">false</itc:parameter>
+			</itc:chart>
+		</itc:section>
+		<!-- DB2 related  sections in here -->
+		<h2>DB2 ${report/SAPSID} Tablespace Used %</h2>
+		<itc:chart>
+			<itc:parameter name="OBJECT_Id">6548054991166249</itc:parameter>
+			<itc:parameter name="context">${context/APPLICATION_Service}</itc:parameter>
+			<itc:parameter name="table">false</itc:parameter>
+			<itc:parameter name="timeScale">DAY</itc:parameter>
+			<itc:parameter name="range">LM</itc:parameter>
+			<itc:parameter name="fit">width</itc:parameter>
+			<itc:parameter name="legend">right</itc:parameter>
+			<itc:parameter name="title">false</itc:parameter>
+		</itc:chart>
+	</itc:section>
+</itc:report>

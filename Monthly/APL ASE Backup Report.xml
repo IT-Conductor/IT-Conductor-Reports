@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<itc:report xmlns:itc="urn:itconductor">
+   <h1>APL ${self/REPORT.Param2}- ASE Backup Report</h1>
+   <pbr />
+   <itc:section>
+      <itc:parameter name="className">ASE</itc:parameter>
+      <itc:select name="APPLICATION_Role">${self/REPORT.Param1}</itc:select>
+      <itc:select name="OBJECT_OrganizationId">${self/OBJECT_OrganizationId}</itc:select>
+     <h2> ${context/OBJECT_Name}</h2>
+     <itc:query>
+        <itc:parameter name="className">ASEDumpRecord</itc:parameter>      
+        <itc:select name="TRANSACTION.ApplicationId">${context/OBJECT_Id}</itc:select>
+        <itc:select name="ASEDumpRecord.Database_name" oper="NOT_IN">master,model,saptempdb,saptools,sybmgmtdb,sybsecurity,sybsystemdb,sybsystemprocs,tempdb</itc:select>
+        <itc:select name="TRANSACTION.TimeEnd" oper="GT">${auto/timestamp<1month}</itc:select>
+        <itc:select name="TRANSACTION.TimeEnd" oper="LT">${auto/timestamp<0month}</itc:select>
+        <itc:parameter name="select">TRANSACTION.TimeBegin, TRANSACTION.TimeEnd, ASEDumpRecord.Dump_Type, ASEDumpRecord.Database_name, ASEDumpRecord.Status, ASEDumpRecord.Size</itc:parameter> 
+        <itc:parameter name="sortAttr">TRANSACTION.TimeEnd</itc:parameter>
+        <itc:parameter name="sortOrder">ASC</itc:parameter>       
+     </itc:query>
+   </itc:section>
+</itc:report>
