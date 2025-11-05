@@ -1,0 +1,16 @@
+<itc:report xmlns:itc="urn:itconductor">
+  <h1>${context/OBJECT_Name} - Availability Report</h1>
+	<itc:threshold>
+	<itc:parameter name="className">Threshold</itc:parameter>
+	<itc:parameter name="THRESHOLD_ObjectId">${context/OBJECT_Id}</itc:parameter>
+	<itc:parameter name="THRESHOLD_AttributeName">OBJECT_Availability</itc:parameter>
+	<itc:parameter name="title">false</itc:parameter>
+	<itc:parameter name="timeScale">DAY</itc:parameter>
+	<itc:parameter name="range">LM</itc:parameter>
+	<itc:parameter name="annotations">false</itc:parameter>
+	<itc:parameter name="width">100%</itc:parameter>
+	<itc:parameter name="excludeCategory.Alarm">true</itc:parameter>
+	<itc:parameter name="excludeCategory.Warning">true</itc:parameter>
+	<itc:parameter name="excludeCategory.Severity">true</itc:parameter>
+   </itc:threshold>
+</itc:report>
